@@ -56,6 +56,7 @@ try:
         # cv2.imshow("test", im)
         # cv2.waitKey(1)
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        # cv2.imshow("test", hsv)
             # input color 
         def num_to_str(color):
             switcher = {
@@ -73,15 +74,24 @@ try:
         sat_stage1_color = stage1_color_hsv[0][0][1]
         val_stage1_color = stage1_color_hsv[0][0][2]
 
+
         lower_range = np.array([hue_stage1_color,100,100], dtype=np.uint8)
         upper_range = np.array([hue_stage1_color,255,255], dtype=np.uint8)
 
-        mask = cv2.inRange(hsv, lower_range, upper_range)
+
+        # mask = cv2.inRange(hsv, lower_range, upper_range)
+        mask = cv2.inRange(hsv, np.array([0,35,35]), np.array([20,255,255])) #  명도, 채도 확인 필요 
+        result1 = cv2.bitwise_and(frame, frame, mask = mask)
+        cv2.imshow("hsv", hsv)
+        cv2.imshow("test", mask)
         mask = cv2.erode(mask, None, iterations=2)
         mask = cv2.dilate(mask, None, iterations=10)
 
+       
 
         cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+
+        # print(cnts)
 
         centre = None 
 
